@@ -1,5 +1,3 @@
-import React from "react";
-import { cn } from "../lib/utils";
 import { Spotlight } from "./ui/Spotlight";
 import {SignupFormDemo as Signup} from "./Signup";
 
