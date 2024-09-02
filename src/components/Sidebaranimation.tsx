@@ -9,6 +9,8 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
+import { PlaceholdersAndVanishInputDemo } from "../components/Inputbar";
+import { ShootingStarsAndStarsBackgroundDemo } from "../components/Chatbg";
 
 export function SidebarDemo() {
   const links = [
@@ -42,11 +44,13 @@ export function SidebarDemo() {
     },
   ];
   const [open, setOpen] = useState(false);
+
   return (
     <div
       className={cn(
-        "rounded-md w-[100vw] flex flex-col md:flex-row bg-slate-900 dark:bg-neutral-800 flex-1 max-w-7xl border border-neutral-200 dark:border-neutral-700 overflow-hidden",
-        "h-screen" // for your use case, use `h-screen` instead of `h-[60vh]`
+        "rounded-md flex flex-col md:flex-row dark:bg-neutral-800 flex-1 max-w-7xl border border-neutral-200 dark:border-neutral-700 overflow-hidden",
+        "h-screen",
+        "w-[100vw]" // for your use case, use `h-screen` instead of `h-[60vh]`
       )}
     >
       <Sidebar open={open} setOpen={setOpen}>
@@ -82,6 +86,7 @@ export function SidebarDemo() {
     </div>
   );
 }
+
 export const Logo = () => {
   return (
     <a
@@ -99,6 +104,7 @@ export const Logo = () => {
     </a>
   );
 };
+
 export const LogoIcon = () => {
   return (
     <a
@@ -110,14 +116,20 @@ export const LogoIcon = () => {
   );
 };
 
-// Dummy dashboard component with content
+// Updated Dashboard component with background covering the screen and input bar on top
 const Dashboard = () => {
   return (
-    <div className="flex flex-1">
-      <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-[100vw]">
+    <div className="w-full h-full relative overflow-hidden">
+      {/* Background covering the entire screen */}
+      <div className="absolute inset-0 z-0 w-full h-full">
+        <ShootingStarsAndStarsBackgroundDemo />
+      </div>
 
-
+      {/* Input bar positioned at the middle bottom */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-md px-4">
+        <PlaceholdersAndVanishInputDemo />
       </div>
     </div>
   );
 };
+
