@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { cn } from "../lib/utils";
@@ -7,11 +7,34 @@ import {
   IconBrandGoogle,
   IconBrandOnlyfans,
 } from "@tabler/icons-react";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { app } from "../firebase";
+import { useNavigate } from "react-router-dom";
+
+const auth = getAuth(app);
 
 export function SignupFormDemo() {
+  const navigate = useNavigate()
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+
+  const loginuser = () => {
+    signInWithEmailAndPassword(auth,email,password).then((value) => {
+      console.log(value);
+      navigate('/chat')
+    })
+    .catch((error) => {
+      console.error(error);
+      });
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    loginuser();
   };
   return (
     <div className="h-[100vh] w-full rounded-md bg-neutral-800 relative flex flex-col items-center justify-center antialiased">
@@ -25,12 +48,25 @@ export function SignupFormDemo() {
 
         <form className="my-8" onSubmit={handleSubmit}>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="email" className=" text-neutral-200">Email Address</Label>
-            <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
+            <Label htmlFor="email" className=" text-neutral-200">
+              Email Address
+            </Label>
+            <Input
+              id="email"
+              placeholder="projectmayhem@fc.com"
+              type="email"
+              onChange={(e) => setemail(e.target.value)}
+              value={email}
+            />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="password" className=" text-neutral-200">Password</Label>
-            <Input id="password" placeholder="••••••••" type="password" />
+            <Label htmlFor="password" className=" text-neutral-200">
+              Password
+            </Label>
+            <Input id="password" placeholder="••••••••" type="password"
+              onChange={(e) => setpassword(e.target.value)}
+              value={password}
+            />
           </LabelInputContainer>
 
           <button

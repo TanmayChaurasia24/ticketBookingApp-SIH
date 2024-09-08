@@ -1,17 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { cn } from "../lib/utils";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { app } from "../firebase";
 import {
   IconBrandGithub,
   IconBrandGoogle,
   IconBrandOnlyfans,
 } from "@tabler/icons-react";
 
+const auth = getAuth(app);
+
 export function SignupFormDemo() {
+  const [firstname, setfirstname] = useState("");
+  const [lastname, setlastname] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+
+  const signupUser = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        
+        // Update the user's profile with firstname and lastname
+        updateProfile(user, {
+          displayName: `${firstname} ${lastname}`,
+        }).then(() => {
+          console.log("User profile updated successfully");
+        }).catch((error) => {
+          console.error("Error updating user profile: ", error);
+        });
+
+        console.log("User signed up: ", user);
+      })
+      .catch((error) => {
+        console.error("Error signing up: ", error);
+      });
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    signupUser();
   };
   return (
     <div className="h-[100vh] w-full rounded-md bg-neutral-800 relative flex flex-col items-center justify-center antialiased">
@@ -26,21 +57,53 @@ export function SignupFormDemo() {
         <form className="my-8" onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
             <LabelInputContainer>
-              <Label htmlFor="firstname" className=" text-neutral-200">First name</Label>
-              <Input id="firstname" placeholder="Tyler" type="text" />
+              <Label htmlFor="firstname" className=" text-neutral-200">
+                First name
+              </Label>
+              <Input
+                id="firstname"
+                placeholder="Tyler"
+                type="text"
+                onChange={(e) => setfirstname(e.target.value)}
+                value={firstname}
+              />
             </LabelInputContainer>
             <LabelInputContainer>
-              <Label htmlFor="lastname" className=" text-neutral-200">Last name</Label>
-              <Input id="lastname" placeholder="Durden" type="text" />
+              <Label htmlFor="lastname" className=" text-neutral-200">
+                Last name
+              </Label>
+              <Input
+                id="lastname"
+                placeholder="Durden"
+                type="text"
+                value={lastname}
+                onChange={(e) => setlastname(e.target.value)}
+              />
             </LabelInputContainer>
           </div>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="email" className=" text-neutral-200">Email Address</Label>
-            <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
+            <Label htmlFor="email" className=" text-neutral-200">
+              Email Address
+            </Label>
+            <Input
+              id="email"
+              placeholder="projectmayhem@fc.com"
+              type="email"
+              onChange={(e) => setemail(e.target.value)}
+              value={email}
+            />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="password" className=" text-neutral-200">Password</Label>
-            <Input id="password" placeholder="••••••••" type="password" />
+            <Label htmlFor="password" className=" text-neutral-200">
+              Password
+            </Label>
+            <Input
+              id="password"
+              placeholder="••••••••"
+              type="password"
+              onChange={(e) => setpassword(e.target.value)}
+              value={password}
+            />
           </LabelInputContainer>
 
           <button

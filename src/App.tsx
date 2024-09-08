@@ -6,7 +6,9 @@ import {SpotlightPreview as Login} from "./components/LoginAnimation";
 import Chat from "./components/Chat";
 import Profile from "./components/Profile";
 
+
 const App: React.FC = () => {
+
   return (
     <>
       <BrowserRouter>
